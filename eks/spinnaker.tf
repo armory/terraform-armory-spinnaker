@@ -9,7 +9,8 @@ resource "kubernetes_namespace" "spinnaker" {
 
   depends_on = [
     "aws_eks_cluster.aws_eks",
-    "aws_autoscaling_group.aws_eks"
+    "aws_autoscaling_group.aws_eks",
+    "aws_route_table_association.aws_eks"
   ]
 }
 
@@ -35,8 +36,9 @@ resource "kubernetes_service" "spin_deck_lb" {
 
   depends_on = [
     "aws_eks_cluster.aws_eks",
-    "aws_autoscaling_group.aws_eks".
-    "kubernetes_namespace.spinnaker"
+    "aws_autoscaling_group.aws_eks",
+    "kubernetes_namespace.spinnaker",
+    "aws_route_table_association.aws_eks"
   ]
 }
 
@@ -62,8 +64,9 @@ resource "kubernetes_service" "spin_gate_lb" {
 
   depends_on = [
     "aws_eks_cluster.aws_eks",
-    "aws_autoscaling_group.aws_eks".
-    "kubernetes_namespace.spinnaker"
+    "aws_autoscaling_group.aws_eks",
+    "kubernetes_namespace.spinnaker",
+    "aws_route_table_association.aws_eks"
   ]
 }
 
