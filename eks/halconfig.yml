@@ -1,0 +1,36 @@
+currentDeployment: default
+deploymentConfigurations:
+- name: default
+  version: 2.5.2
+  providers:
+    kubernetes:
+      enabled: true
+      accounts:
+      - name: spinnaker
+        providerVersion: V2
+        namespaces:
+        - spinnaker
+        kubeconfigFile: /home/spinnaker/.hal/secret/kubeconfig-spinnaker-sa
+        onlySpinnakerManaged: true
+      primaryAccount: spinnaker
+  deploymentEnvironment:
+    size: SMALL
+    type: Distributed
+    accountName: spinnaker
+    location: spinnaker
+  persistentStorage:
+    persistentStoreType: s3
+    s3:
+      bucket: BUCKET_NAME
+      rootFolder: front50
+      region: us-east-1
+  features:
+    artifacts: true
+  artifacts:
+    http:
+      enabled: true
+  armory:
+    diagnostics:
+      enabled: true
+      logging:
+        enabled: true
