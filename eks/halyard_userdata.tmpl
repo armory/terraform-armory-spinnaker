@@ -6,6 +6,8 @@ set -x
 CLUSTER_NAME=${CLUSTER_NAME}
 BUCKET_NAME=${BUCKET_NAME}
 REGION=${REGION}
+GATE_ENDPOINT=${GATE_ENDPOINT}
+DECK_ENDPOINT=${DECK_ENDPOINT}
 
 until [[ $(lsblk | grep nvme1n1 | wc -l ) -eq 1 ]];
 do 
@@ -96,7 +98,10 @@ curl -L https://raw.githubusercontent.com/armory/terraform-armory-spinnaker/mast
 if [[ ! -f /etc/halyard/.hal/config ]];
 then
   echo "No halconfig, seeding with template"
-  sed "s/BUCKET_NAME/$${BUCKET_NAME}/g" /etc/halyard/.hal/config-template > /etc/halyard/.hal/config
+  sed -e "s/BUCKET_NAME/$${BUCKET_NAME}/g" \
+    -e "s/GATE_ENDPOINT/$${GATE_ENDPOINT}/g" \
+    -e "s/DECK_ENDPOINT/$${DECK_ENDPOINT}/g" \
+    /etc/halyard/.hal/config-template > /etc/halyard/.hal/config
   chown 100.65533 /etc/halyard/.hal/config
 fi
 

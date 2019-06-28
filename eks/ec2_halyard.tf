@@ -135,6 +135,8 @@ locals {
     CLUSTER_NAME = "${var.cluster_name}"
     BUCKET_NAME = "${aws_s3_bucket.armory_spinnaker_bucket.id}"
     REGION = "${var.provider_region}"
+    DECK_ENDPOINT = "${kubernetes_service.spin_deck_lb.load_balancer_ingress[0].hostname}"
+    GATE_ENDPOINT = "${kubernetes_service.spin_gate_lb.load_balancer_ingress[0].hostname}"
   })
 }
 
@@ -144,9 +146,9 @@ resource "aws_volume_attachment" "halyard_ec2" {
   instance_id = "${aws_instance.halyard_ec2.id}"
 }
 
-output "user_data" {
-  value = "${local.user_data}"
-}
+# output "user_data" {
+#   value = "${local.user_data}"
+# }
 
 # data "aws_ami" "halyard_ami" {
 #   filter {

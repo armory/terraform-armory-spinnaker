@@ -24,6 +24,11 @@ deploymentConfigurations:
       bucket: BUCKET_NAME
       rootFolder: front50
       region: us-east-1
+  security:
+    apiSecurity:
+      overrideBaseUrl: http://GATE_ENDPOINT
+    uiSecurity:
+      overrideBaseUrl: http://DECK_ENDPOINT
   features:
     artifacts: true
   artifacts:
