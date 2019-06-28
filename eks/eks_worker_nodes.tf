@@ -28,6 +28,12 @@ POLICY
 }
 
 #*
+resource "aws_iam_instance_profile" "aws_eks_node" {
+  name = "${aws_iam_role.aws_eks_node.name}"
+  role = "${aws_iam_role.aws_eks_node.name}"
+}
+
+#*
 resource "aws_iam_role_policy_attachment" "aws_eks_node_AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
   role       = "${aws_iam_role.aws_eks_node.name}"
@@ -64,12 +70,6 @@ resource "aws_iam_role_policy" "aws_eks_node_s3_bucket_policy" {
     ]
 }
 EOF
-}
-
-#*
-resource "aws_iam_instance_profile" "aws_eks_node" {
-  name = "${aws_iam_role.aws_eks_node.name}"
-  role = "${aws_iam_role.aws_eks_node.name}"
 }
 
 #*

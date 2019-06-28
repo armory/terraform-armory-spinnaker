@@ -32,6 +32,10 @@ resource "aws_subnet" "aws_eks" {
      "kubernetes.io/cluster/${var.cluster_name}", "shared",
     )
   }"
+
+  depends_on = [
+    aws_vpc.aws_eks
+  ]
 }
 
 resource "aws_subnet" "aws_halyard" {
@@ -42,6 +46,10 @@ resource "aws_subnet" "aws_halyard" {
   tags = {
     Name = "${var.cluster_name}-halyard"
   }
+
+  depends_on = [
+    aws_vpc.aws_eks
+  ]
 }
 
 #*
@@ -51,6 +59,10 @@ resource "aws_internet_gateway" "aws_eks" {
   tags = {
     Name = "${var.cluster_name}"
   }
+
+  depends_on = [
+    aws_vpc.aws_eks
+  ]
 }
 
 #*
@@ -61,6 +73,10 @@ resource "aws_route_table" "aws_eks" {
     cidr_block = "0.0.0.0/0"
     gateway_id = "${aws_internet_gateway.aws_eks.id}"
   }
+
+  depends_on = [
+    aws_vpc.aws_eks
+  ]
 }
 
 #*
@@ -69,6 +85,11 @@ resource "aws_route_table_association" "aws_eks" {
 
   subnet_id      = "${aws_subnet.aws_eks.*.id[count.index]}"
   route_table_id = "${aws_route_table.aws_eks.id}"
+
+  depends_on = [
+    aws_route_table.aws_eks,
+    aws_subnet.aws_eks
+  ]
 }
 
 
@@ -76,4 +97,9 @@ resource "aws_route_table_association" "aws_eks" {
 resource "aws_route_table_association" "aws_halyard" {
   subnet_id      = "${aws_subnet.aws_halyard.id}"
   route_table_id = "${aws_route_table.aws_eks.id}"
+
+  depends_on = [
+    aws_vpc.aws_eks,
+    aws_subnet.aws_halyard
+  ]
 }
