@@ -1,3 +1,4 @@
 custom.*
 .terraform
 .notes
+eks/*.tfvars
