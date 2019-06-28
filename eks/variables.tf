@@ -9,6 +9,7 @@ variable "cluster_name" {
 variable "vpc_cidr_prefix" {
   type        = "string"
   description = "First two octets of the subnets that are going to be used by the cluster. Ex: 10.0"
+  default     = "10.0"
 }
 
 variable "client_ip_range" {
@@ -19,6 +20,7 @@ variable "client_ip_range" {
 
 variable "ec2_instance_type" {
   type    = "string"
+  default = "m5.xlarge"
 }
 
 variable "ec2_instances_min" {
@@ -26,11 +28,11 @@ variable "ec2_instances_min" {
 }
 
 variable "ec2_instances_max" {
-  default = 1 
+  default = 3
 }
 
 variable "ec2_instances_desired" {
-  default = 1 
+  default = 2 
 }
 
 variable "aws_eks_ami_filter" {
