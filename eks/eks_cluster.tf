@@ -7,7 +7,7 @@
 
 #*
 resource "aws_iam_role" "aws_eks_cluster" {
-  name = "${var.cluster_name}-cluster"
+  name_prefix = "${var.cluster_name}-cluster"
 
   assume_role_policy = <<POLICY
 {
