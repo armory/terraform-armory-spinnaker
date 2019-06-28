@@ -44,6 +44,28 @@ resource "aws_security_group_rule" "aws_ec2_halyard_ssh" {
   type              = "ingress"
 }
 
+# Add S3 bucket access to EKS nodes
+resource "aws_iam_role_policy" "aws_eks_node_s3_bucket_policy" {
+  name = "${var.cluster_name}-eks-node-s3"
+  role = "${aws_iam_role.aws_eks_node.id}"
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::${aws_s3_bucket.armory_spinnaker_bucket.id}",
+                "arn:aws:s3:::${aws_s3_bucket.armory_spinnaker_bucket.id}/*"
+            ]
+        }
+    ]
+}
+EOF
+}
+
 data "aws_iam_policy_document" "instance_role_assume_policy" {
   statement {
     actions = ["sts:AssumeRole"]

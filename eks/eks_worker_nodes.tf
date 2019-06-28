@@ -51,26 +51,6 @@ resource "aws_iam_role_policy_attachment" "aws_eks_node_AmazonEC2ContainerRegist
   role       = "${aws_iam_role.aws_eks_node.name}"
 }
 
-resource "aws_iam_role_policy" "aws_eks_node_s3_bucket_policy" {
-  name = "${var.cluster_name}-eks-node-s3"
-  role = "${aws_iam_role.aws_eks_node.id}"
-
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": "s3:*",
-            "Resource": [
-                "arn:aws:s3:::${aws_s3_bucket.armory_spinnaker_bucket.id}",
-                "arn:aws:s3:::${aws_s3_bucket.armory_spinnaker_bucket.id}/*"
-            ]
-        }
-    ]
-}
-EOF
-}
 
 #*
 resource "aws_security_group" "aws_eks_node" {
