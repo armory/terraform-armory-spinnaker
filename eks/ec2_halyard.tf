@@ -57,7 +57,7 @@ data "aws_iam_policy_document" "instance_role_assume_policy" {
 
 #*
 resource "aws_iam_role" "halyard_role" {
-  name_prefix = "${var.cluster_name}-halyard-role"
+  name_prefix = "${var.cluster_name}-hal"
 
   assume_role_policy = "${data.aws_iam_policy_document.instance_role_assume_policy.json}"
 }
