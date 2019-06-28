@@ -1,3 +1,5 @@
+### EVERY FIELD IN THIS FILE SHOULD BE UPDATED
+
 # AWS profile for AWS account where resources will be created
 provider_profile = "armory"
 
@@ -10,7 +12,7 @@ ec2_halyard_az = "us-east-1a"
 # Unique name for Spinnaker cluster name
 cluster_name = "armory-spinnaker"
 
-# If you want additional users to be able to access your Kubernetes cluster, specify them here
+# If you want additional AWS users to be able to access your Kubernetes cluster, specify them here
 master_users = <<EOF
 - userarn: arn:aws:iam::012345678901:user/andrew
   username: andrew
