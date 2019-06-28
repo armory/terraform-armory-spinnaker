@@ -83,7 +83,7 @@ resource "aws_security_group_rule" "aws_eks_cluster_ingress_workstation_https" {
   from_port         = 443
   protocol          = "tcp"
   security_group_id = "${aws_security_group.aws_eks_cluster.id}"
-  cidr_blocks       = ["${var.eks_client}"]
+  cidr_blocks       = ["${var.client_ip_range}"]
   to_port           = 443
   type              = "ingress"
 }

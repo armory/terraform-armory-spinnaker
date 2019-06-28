@@ -12,7 +12,7 @@ resource "aws_vpc" "aws_eks" {
 
   tags = "${
     map(
-     "Name", "${var.cluster_name}-node",
+     "Name", "${var.cluster_name}",
      "kubernetes.io/cluster/${var.cluster_name}", "shared",
     )
   }"

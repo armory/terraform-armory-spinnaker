@@ -11,7 +11,7 @@ variable "vpc_cidr_prefix" {
   description = "First two octets of the subnets that are going to be used by the cluster. Ex: 10.0"
 }
 
-variable "eks_client" {
+variable "client_ip_range" {
   type        = "string"
   default = "0.0.0.0/0"
   description = "CIDR block of IP addresses allowed to connect to the EKS cluster from the outside world."

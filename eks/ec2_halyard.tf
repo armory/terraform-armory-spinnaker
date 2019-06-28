@@ -35,7 +35,7 @@ resource "aws_security_group" "aws_ec2_halyard" {
 
 #*
 resource "aws_security_group_rule" "aws_ec2_halyard_ssh" {
-  cidr_blocks       = ["${var.eks_client}"]
+  cidr_blocks       = ["${var.client_ip_range}"]
   description       = "Allow workstation to SSH into Halyard"
   from_port         = 22
   protocol          = "tcp"

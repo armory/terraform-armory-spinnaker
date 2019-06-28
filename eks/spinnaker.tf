@@ -1,3 +1,13 @@
+resource "kubernetes_namespace" "spinnaker" {
+  metadata {
+    annotations = {
+      name = "spinnaker"
+    }
+
+    name = "spinnaker"
+  }
+}
+
 resource "kubernetes_service" "spin_deck_lb" {
   metadata {
     name = "spin-deck-lb"
@@ -13,8 +23,14 @@ resource "kubernetes_service" "spin_deck_lb" {
       target_port = 9000
     }
 
+    load_balancer_source_ranges = ["${var.client_ip_range}"]
+
     type = "LoadBalancer"
   }
+
+  depends_on = [
+    kubernetes_namespace.spinnaker
+  ]
 }
 
 resource "kubernetes_service" "spin_gate_lb" {
@@ -32,8 +48,14 @@ resource "kubernetes_service" "spin_gate_lb" {
       target_port = 8084
     }
 
+    load_balancer_source_ranges = ["${var.client_ip_range}"]
+
     type = "LoadBalancer"
   }
+
+  depends_on = [
+    kubernetes_namespace.spinnaker
+  ]
 }
 
 output "deck_endpoint" {
