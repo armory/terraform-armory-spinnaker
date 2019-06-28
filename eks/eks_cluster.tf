@@ -71,17 +71,6 @@ resource "aws_security_group_rule" "aws_eks_cluster_ingress_node_https" {
 }
 
 #*
-resource "aws_security_group_rule" "aws_eks_cluster_ingress_halyard_https" {
-  description              = "Allow Halyard to communicate with the cluster API Server"
-  from_port                = 443
-  protocol                 = "tcp"
-  security_group_id        = "${aws_security_group.aws_eks_cluster.id}"
-  source_security_group_id = "${aws_security_group.aws_ec2_halyard.id}"
-  to_port                  = 443
-  type                     = "ingress"
-}
-
-#*
 resource "aws_security_group_rule" "aws_eks_cluster_ingress_workstation_https" {
   description       = "Allow workstation to communicate with the cluster API Server"
   from_port         = 443
