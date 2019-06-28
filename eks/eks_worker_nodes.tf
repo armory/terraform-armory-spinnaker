@@ -68,7 +68,7 @@ EOF
 
 #*
 resource "aws_iam_instance_profile" "aws_eks_node" {
-  name = "${var.cluster_name}"
+  name = "${aws_iam_role.aws_eks_node.name}"
   role = "${aws_iam_role.aws_eks_node.name}"
 }
 

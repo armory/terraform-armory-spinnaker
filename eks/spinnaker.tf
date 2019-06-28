@@ -6,6 +6,10 @@ resource "kubernetes_namespace" "spinnaker" {
 
     name = "spinnaker"
   }
+
+  depends_on = [
+    "aws_eks_cluster.aws_eks"
+  ]
 }
 
 resource "kubernetes_service" "spin_deck_lb" {
