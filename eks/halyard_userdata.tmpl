@@ -3,24 +3,31 @@ set -e
 set -x
 
 ## These have to come from Terraform
-CLUSTER_NAME=terraform-armory-spinnaker
-BUCKET_NAME=terraform-20190627224318803600000001
-REGION=us-east-1
+CLUSTER_NAME=${CLUSTER_NAME}
+BUCKET_NAME=${BUCKET_NAME}
+REGION=${REGION}
 
-if [[ $(sudo file -s /dev/nvme0n1 | awk '{print $NF}') == 'data' ]];
+until [[ $(lsblk | grep nvme1n1 | wc -l ) -eq 1 ]];
+do 
+  echo 'wait for attach /dev/nvme1n1' >> /tmp/sleep;
+  date >> /tmp/sleep;
+  sleep 2
+done
+
+if [[ $(sudo file -s /dev/nvme1n1 | awk '{print $NF}') == 'data' ]];
 then
-  echo "Formatting /dev/nvme0n1 as ext4"
-  sudo mkfs -t ext4 /dev/nvme0n1
-elif [[ $(sudo file -s /dev/nvme0n1 | grep ext4 | wc -l) -eq 1 ]];
+  echo "Formatting /dev/nvme1n1 as ext4"
+  sudo mkfs -t ext4 /dev/nvme1n1
+elif [[ $(sudo file -s /dev/nvme1n1 | grep ext4 | wc -l) -eq 1 ]];
 then
-  echo "Detected existing ext4 filesystem on /dev/nvme0n1"
+  echo "Detected existing ext4 filesystem on /dev/nvme1n1"
 else
-  echo "Something is wrong - other file system detected on /dev/nvme0n1"
+  echo "Something is wrong - other file system detected on /dev/nvme1n1"
   exit 1
 fi
 
 sudo mkdir -p /etc/halyard
-echo "UUID=$(sudo blkid -o value -s UUID /dev/nvme0n1)    /etc/halyard    ext4 defaults    0 0" | sudo tee -a /etc/fstab
+echo "UUID=$(sudo blkid -o value -s UUID /dev/nvme1n1)    /etc/halyard    ext4 defaults    0 0" | sudo tee -a /etc/fstab
 mount -a
 
 # Clean up later - permissions mismatch
@@ -66,22 +73,22 @@ curl -L https://github.com/armory/spinnaker-tools/releases/download/0.0.6/spinna
   && chmod +x /usr/local/bin/spinnaker-tools
 
 SOURCE_KUBECONFIG=/root/kubeconfig
-aws eks --region ${REGION} update-kubeconfig --name ${CLUSTER_NAME}
-aws eks --region ${REGION} update-kubeconfig --name ${CLUSTER_NAME} --kubeconfig ${SOURCE_KUBECONFIG}
+aws eks --region $${REGION} update-kubeconfig --name $${CLUSTER_NAME}
+aws eks --region $${REGION} update-kubeconfig --name $${CLUSTER_NAME} --kubeconfig $${SOURCE_KUBECONFIG}
 
-CONTEXT=$(kubectl --kubeconfig ${SOURCE_KUBECONFIG} config current-context)
+CONTEXT=$(kubectl --kubeconfig $${SOURCE_KUBECONFIG} config current-context)
 DEST_KUBECONFIG=/etc/halyard/.hal/secret/kubeconfig-spinnaker-sa
 SPINNAKER_NAMESPACE=spinnaker
 SERVICE_ACCOUNT_NAME=spinnaker-service-account
 
 spinnaker-tools create-service-account \
-  --kubeconfig ${SOURCE_KUBECONFIG} \
-  --context ${CONTEXT} \
-  --output ${DEST_KUBECONFIG} \
-  --namespace ${SPINNAKER_NAMESPACE} \
-  --service-account-name ${SERVICE_ACCOUNT_NAME}
+  --kubeconfig $${SOURCE_KUBECONFIG} \
+  --context $${CONTEXT} \
+  --output $${DEST_KUBECONFIG} \
+  --namespace $${SPINNAKER_NAMESPACE} \
+  --service-account-name $${SERVICE_ACCOUNT_NAME}
 
-chown 100.65533 ${DEST_KUBECONFIG}
+chown 100.65533 $${DEST_KUBECONFIG}
 
 curl -L https://raw.githubusercontent.com/armory/terraform-armory-spinnaker/master/eks/halconfig.yml \
   -o /etc/halyard/.hal/config-template
@@ -89,7 +96,7 @@ curl -L https://raw.githubusercontent.com/armory/terraform-armory-spinnaker/mast
 if [[ ! -f /etc/halyard/.hal/config ]];
 then
   echo "No halconfig, seeding with template"
-  sed "s/BUCKET_NAME/${BUCKET_NAME}/g" /etc/halyard/.hal/config-template > /etc/halyard/.hal/config
+  sed "s/BUCKET_NAME/$${BUCKET_NAME}/g" /etc/halyard/.hal/config-template > /etc/halyard/.hal/config
   chown 100.65533 /etc/halyard/.hal/config
 fi
 

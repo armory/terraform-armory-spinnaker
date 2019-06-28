@@ -8,6 +8,7 @@ resource "aws_ebs_volume" "halyard_config" {
 }
 
 resource "aws_s3_bucket" "armory_spinnaker_bucket" {
+  bucket_prefix = "${var.cluster_name}"
   tags = {
     Name = "Armory Spinnaker"
   }
@@ -120,10 +121,31 @@ resource "aws_instance" "halyard_ec2" {
   iam_instance_profile          = "${aws_iam_instance_profile.halyard_role.name}"
   associate_public_ip_address   = true
 
+  key_name                      = "${var.aws_halyard_ssh_key}"
+
+  user_data = "${local.user_data}"
+
   tags = {
     Name = "${var.cluster_name}-halyard"
   }
+}
 
+locals {
+  user_data = templatefile("${path.module}/halyard_userdata.tmpl", {
+    CLUSTER_NAME = "${var.cluster_name}"
+    BUCKET_NAME = "${aws_s3_bucket.armory_spinnaker_bucket.id}"
+    REGION = "${var.provider_region}"
+  })
+}
+
+resource "aws_volume_attachment" "halyard_ec2" {
+  device_name = "/dev/xvdb"
+  volume_id   = "${aws_ebs_volume.halyard_config.id}"
+  instance_id = "${aws_instance.halyard_ec2.id}"
+}
+
+output "user_data" {
+  value = "${local.user_data}"
 }
 
 # data "aws_ami" "halyard_ami" {

@@ -70,3 +70,10 @@ resource "aws_route_table_association" "aws_eks" {
   subnet_id      = "${aws_subnet.aws_eks.*.id[count.index]}"
   route_table_id = "${aws_route_table.aws_eks.id}"
 }
+
+
+#*
+resource "aws_route_table_association" "aws_halyard" {
+  subnet_id      = "${aws_subnet.aws_halyard.id}"
+  route_table_id = "${aws_route_table.aws_eks.id}"
+}
