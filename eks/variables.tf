@@ -58,6 +58,7 @@ variable "ec2_halyard_az" {
 variable "aws_ubuntu_ami" {
   type        = "string"
   default     = "ami-095192256fe1477ad"
+  # ami-04aac3d7ea7609469 is us-west-2
   description = "AMI for Halyard instance (defaults to Ubuntu 18.04)"
 }
 
