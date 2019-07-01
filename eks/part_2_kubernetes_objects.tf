@@ -36,10 +36,15 @@ ROLES
     mapUsers = "${var.master_users}"
   }
 
+  # Don't create any Kubernetes objects until EKS is fully up
   depends_on = [
-    "aws_eks_cluster.aws_eks",
-    "aws_autoscaling_group.aws_eks",
-    "aws_route_table_association.aws_eks"
+    aws_eks_cluster.aws_eks,
+    aws_autoscaling_group.aws_eks,
+    aws_route_table_association.aws_eks,
+    aws_security_group_rule.aws_eks_cluster_ingress_node_https,
+    aws_security_group_rule.aws_eks_cluster_ingress_workstation_https,
+    aws_security_group_rule.aws_eks_node_ingress_self,
+    aws_security_group_rule.aws_eks_node_ingress_cluster
   ]
 }
 
@@ -53,9 +58,7 @@ resource "kubernetes_namespace" "spinnaker" {
   }
 
   depends_on = [
-    "aws_eks_cluster.aws_eks",
-    "aws_autoscaling_group.aws_eks",
-    "aws_route_table_association.aws_eks"
+    kubernetes_config_map.aws_auth
   ]
 }
 
@@ -80,10 +83,7 @@ resource "kubernetes_service" "spin_deck_lb" {
   }
 
   depends_on = [
-    "aws_eks_cluster.aws_eks",
-    "aws_autoscaling_group.aws_eks",
-    "kubernetes_namespace.spinnaker",
-    "aws_route_table_association.aws_eks"
+    kubernetes_namespace.spinnaker
   ]
 }
 
@@ -108,10 +108,7 @@ resource "kubernetes_service" "spin_gate_lb" {
   }
 
   depends_on = [
-    "aws_eks_cluster.aws_eks",
-    "aws_autoscaling_group.aws_eks",
-    "kubernetes_namespace.spinnaker",
-    "aws_route_table_association.aws_eks"
+    kubernetes_namespace.spinnaker
   ]
 }
 
