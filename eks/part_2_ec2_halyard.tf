@@ -164,7 +164,7 @@ resource "aws_instance" "halyard_ec2" {
 
   # Don't create this until all K8s objects are up
   depends_on = [
-    kubernetes_service.spin_deck_lb
+    kubernetes_service.spin_deck_lb,
     kubernetes_service.spin_gate_lb
   ]
 }
