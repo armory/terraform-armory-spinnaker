@@ -12,6 +12,12 @@ deploymentConfigurations:
         - spinnaker
         kubeconfigFile: /home/spinnaker/.hal/secret/kubeconfig-spinnaker-sa
         onlySpinnakerManaged: true
+      - name: kubernetes
+        providerVersion: V2
+        omitNamespaces:
+        - spinnaker
+        kubeconfigFile: /home/spinnaker/.hal/secret/kubeconfig-all-sa
+        onlySpinnakerManaged: true
       primaryAccount: spinnaker
   deploymentEnvironment:
     size: SMALL
