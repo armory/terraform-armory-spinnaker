@@ -92,7 +92,7 @@ spinnaker-tools create-service-account \
 
 chown 100.65533 $${DEST_KUBECONFIG}
 
-curl -L https://raw.githubusercontent.com/armory/terraform-armory-spinnaker/master/eks/halconfig.yml \
+curl -L https://raw.githubusercontent.com/armory/terraform-armory-spinnaker/master/eks/templates/halconfig.yml \
   -o /etc/halyard/.hal/config-template
 
 if [[ ! -f /etc/halyard/.hal/config ]];

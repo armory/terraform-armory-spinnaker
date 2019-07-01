@@ -164,7 +164,7 @@ resource "aws_instance" "halyard_ec2" {
 }
 
 locals {
-  user_data = templatefile("${path.module}/halyard_userdata.tmpl", {
+  user_data = templatefile("${path.module}/templates/halyard_userdata.tmpl", {
     CLUSTER_NAME = "${var.cluster_name}"
     BUCKET_NAME = "${aws_s3_bucket.armory_spinnaker_bucket.id}"
     REGION = "${var.provider_region}"
