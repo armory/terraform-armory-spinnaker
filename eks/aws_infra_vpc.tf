@@ -34,7 +34,7 @@ resource "aws_subnet" "aws_eks" {
   }"
 
   depends_on = [
-    aws_vpc.aws_eks
+    "aws_vpc.aws_eks"
   ]
 }
 
@@ -48,7 +48,7 @@ resource "aws_subnet" "aws_halyard" {
   }
 
   depends_on = [
-    aws_vpc.aws_eks
+    "aws_vpc.aws_eks"
   ]
 }
 
@@ -61,7 +61,7 @@ resource "aws_internet_gateway" "aws_eks" {
   }
 
   depends_on = [
-    aws_vpc.aws_eks
+    "aws_vpc.aws_eks"
   ]
 }
 
@@ -75,7 +75,7 @@ resource "aws_route_table" "aws_eks" {
   }
 
   depends_on = [
-    aws_vpc.aws_eks
+    "aws_vpc.aws_eks"
   ]
 }
 
@@ -87,8 +87,8 @@ resource "aws_route_table_association" "aws_eks" {
   route_table_id = "${aws_route_table.aws_eks.id}"
 
   depends_on = [
-    aws_route_table.aws_eks,
-    aws_subnet.aws_eks
+    "aws_route_table.aws_eks",
+    "aws_subnet.aws_eks"
   ]
 }
 
@@ -99,7 +99,7 @@ resource "aws_route_table_association" "aws_halyard" {
   route_table_id = "${aws_route_table.aws_eks.id}"
 
   depends_on = [
-    aws_vpc.aws_eks,
-    aws_subnet.aws_halyard
+    "aws_vpc.aws_eks",
+    "aws_subnet.aws_halyard"
   ]
 }

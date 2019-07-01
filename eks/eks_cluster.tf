@@ -55,7 +55,7 @@ resource "aws_security_group" "aws_eks_cluster" {
   }
 
   depends_on = [
-    aws_vpc.aws_eks
+    "aws_vpc.aws_eks"
   ]
 }
 
@@ -92,11 +92,11 @@ resource "aws_eks_cluster" "aws_eks" {
   }
 
   depends_on = [
-    aws_vpc.aws_eks,
-    aws_subnet.aws_eks,
-    aws_security_group.aws_eks_cluster,
-    aws_iam_role.aws_eks_cluster,
-    aws_iam_role_policy_attachment.aws_eks_cluster_AmazonEKSClusterPolicy,
-    aws_iam_role_policy_attachment.aws_eks_cluster_AmazonEKSServicePolicy,
+    "aws_vpc.aws_eks",
+    "aws_subnet.aws_eks",
+    "aws_security_group.aws_eks_cluster",
+    "aws_iam_role.aws_eks_cluster",
+    "aws_iam_role_policy_attachment.aws_eks_cluster_AmazonEKSClusterPolicy",
+    "aws_iam_role_policy_attachment.aws_eks_cluster_AmazonEKSServicePolicy",
   ]
 }
