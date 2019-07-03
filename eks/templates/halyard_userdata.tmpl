@@ -100,7 +100,7 @@ spinnaker-tools create-service-account \
   --namespace $${SPINNAKER_NAMESPACE} \
   --service-account-name $${SERVICE_ACCOUNT_NAME_ALL}
 
-chown 100.65533 $${DEST_KUBECONFIG}
+chown 100.65533 $${DEST_KUBECONFIG} $${DEST_KUBECONFIG_ALL}
 
 curl -L https://raw.githubusercontent.com/armory/terraform-armory-spinnaker/master/eks/templates/halconfig.yml \
   -o /etc/halyard/.hal/config-template
@@ -111,6 +111,7 @@ then
   sed -e "s/BUCKET_NAME/$${BUCKET_NAME}/g" \
     -e "s/GATE_ENDPOINT/$${GATE_ENDPOINT}/g" \
     -e "s/DECK_ENDPOINT/$${DECK_ENDPOINT}/g" \
+    -e "s/REGION/$${REGION}/g" \
     /etc/halyard/.hal/config-template > /etc/halyard/.hal/config
   chown 100.65533 /etc/halyard/.hal/config
 fi

@@ -29,7 +29,7 @@ deploymentConfigurations:
     s3:
       bucket: BUCKET_NAME
       rootFolder: front50
-      region: us-east-1
+      region: REGION
   security:
     apiSecurity:
       overrideBaseUrl: http://GATE_ENDPOINT
